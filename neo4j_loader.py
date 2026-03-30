@@ -60,3 +60,22 @@ for i in range(0, total, batch_size):
     print(f"Loaded edges {i} to {min(i+batch_size, total)}...")
 
 print(f"Loaded {total} edges total.")
+
+# Recommendation Cypher Query
+# Run this in Neo4j Browser to generate recommendations:
+#
+# MATCH (seed:Song)
+# WHERE seed.artists CONTAINS 'The Strokes'
+#    OR seed.artists CONTAINS 'Regina Spektor'
+# MATCH (seed)-[r:SIMILAR_TO]-(rec:Song)
+# WHERE NOT rec.artists CONTAINS 'The Strokes'
+#   AND NOT rec.artists CONTAINS 'Regina Spektor'
+#   AND rec.track_genre IN ['alt-rock', 'alternative', 'indie', 'pop', 'rock',
+#       'acoustic', 'singer-songwriter', 'indie-pop', 'power-pop', 'garage',
+#       'punk', 'emo', 'piano', 'folk', 'sad', 'new-wave', 'grunge', 'post-punk']
+#   AND rec.track_name =~ '[\\x00-\\x7F]+'
+# WITH rec, COUNT(r) AS connections, AVG(r.distance) AS avg_dist
+# ORDER BY (toFloat(connections) / avg_dist) DESC
+# RETURN rec.track_name AS title, rec.artists AS artist,
+#        rec.album_name AS album, connections, avg_dist
+# LIMIT 5
