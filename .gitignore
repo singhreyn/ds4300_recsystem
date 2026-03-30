@@ -2,3 +2,4 @@ neo4j_relationships.csv
 spotify.csv
 spotify.zip
 neo4j_nodes.csv
+.DS_Store
