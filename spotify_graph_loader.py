@@ -42,7 +42,7 @@ print(f"Total graph nodes: {len(graph_df)}")
 FEATURES = ["danceability", "energy", "loudness", "speechiness",
             "acousticness", "instrumentalness", "liveness", "valence", "tempo"]
 
-scaler      = MinMaxScaler()
+scaler = MinMaxScaler()
 feat_matrix = scaler.fit_transform(graph_df[FEATURES].fillna(0))
 print(f"Feature matrix shape: {feat_matrix.shape}")
 
@@ -65,8 +65,6 @@ for i in range(n):
                 "dst_id": graph_df.iloc[j]["track_id"],
                 "distance": round(float(d), 4)
             })
-
-print(f"Total edges created: {len(edges)}")
 
 print(f"Total edges created: {len(edges)}")
 
