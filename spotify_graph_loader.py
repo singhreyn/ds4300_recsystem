@@ -1,3 +1,9 @@
+# DS4300 HW5 — Spotify Song Recommendation Graph
+# Team Members: Benoit Schiermeier, Reyna Singh, and Talal Fakhoury
+# Samples 114k Spotify songs, builds a similarity graph, and exports CSVs for Neo4j.
+# Graph model: (:Song)-[:SIMILAR_TO {distance}]->(:Song)
+# Similarity metric: Euclidean distance < 0.35 across 9 normalised audio features
+
 # Imports
 import pandas as pd
 import numpy as np
@@ -42,7 +48,7 @@ print(f"Total graph nodes: {len(graph_df)}")
 FEATURES = ["danceability", "energy", "loudness", "speechiness",
             "acousticness", "instrumentalness", "liveness", "valence", "tempo"]
 
-scaler = MinMaxScaler()
+scaler      = MinMaxScaler()
 feat_matrix = scaler.fit_transform(graph_df[FEATURES].fillna(0))
 print(f"Feature matrix shape: {feat_matrix.shape}")
 
@@ -65,6 +71,8 @@ for i in range(n):
                 "dst_id": graph_df.iloc[j]["track_id"],
                 "distance": round(float(d), 4)
             })
+
+print(f"Total edges created: {len(edges)}")
 
 print(f"Total edges created: {len(edges)}")
 
@@ -110,6 +118,3 @@ node_cols = ["track_id", "track_name", "artists", "album_name", "popularity",
 
 graph_df[node_cols].to_csv("neo4j_nodes.csv", index=False)
 pd.DataFrame(edges).to_csv("neo4j_relationships.csv", index=False)
-
-print("neo4j_nodes.csv saved!")
-print("neo4j_relationships.csv saved!")

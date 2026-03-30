@@ -1,3 +1,8 @@
+# DS4300 HW5 — Poster visualization of the recommendation graph.
+# Team Members: Benoit Schiermeier, Reyna Singh, and Talal Fakhoury
+# Shows seed songs (The Strokes=green, Regina Spektor=blue) connected
+# to the top 5 recommendations (orange) via SIMILAR_TO edges.
+
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import numpy as np

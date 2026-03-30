@@ -1,10 +1,33 @@
+# DS4300 HW5 — Neo4j Loader for Spotify Song Recommendation Graph
+# Team Members: Benoit Schiermeier, Reyna Singh, and Talal Fakhoury
+# Loads nodes and relationships from CSVs into a Neo4j graph database.
+
+# Recommendation Cypher Query
+
+# MATCH (seed:Song)
+# WHERE seed.artists CONTAINS 'The Strokes'
+#    OR seed.artists CONTAINS 'Regina Spektor'
+# MATCH (seed)-[r:SIMILAR_TO]-(rec:Song)
+# WHERE NOT rec.artists CONTAINS 'The Strokes'
+#   AND NOT rec.artists CONTAINS 'Regina Spektor'
+#   AND rec.track_genre IN ['alt-rock', 'alternative', 'indie', 'pop', 'rock',
+#       'acoustic', 'singer-songwriter', 'indie-pop', 'power-pop', 'garage',
+#       'punk', 'emo', 'piano', 'folk', 'sad', 'new-wave', 'grunge', 'post-punk']
+#   AND rec.track_name =~ '[\\x00-\\x7F]+'
+# WITH rec, COUNT(r) AS connections, AVG(r.distance) AS avg_dist
+# ORDER BY (toFloat(connections) / avg_dist) DESC
+# RETURN rec.track_name AS title, rec.artists AS artist,
+#        rec.album_name AS album, connections, avg_dist
+# LIMIT 5
+
+
 from neo4j import GraphDatabase
 import pandas as pd
 
 # Connection
 URI = "neo4j+s://627fa261.databases.neo4j.io"
 USER = "neo4j"
-PASSWORD = "t3sQw5j1eL4gXttJyzR0XFeuWrlXqtccX3tBz6s0Iv8"
+PASSWORD = "YOUR_PASSWORD_HERE"
 
 driver = GraphDatabase.driver(URI, auth=(USER, PASSWORD))
 
@@ -60,22 +83,3 @@ for i in range(0, total, batch_size):
     print(f"Loaded edges {i} to {min(i+batch_size, total)}...")
 
 print(f"Loaded {total} edges total.")
-
-# Recommendation Cypher Query
-# Run this in Neo4j Browser to generate recommendations:
-#
-# MATCH (seed:Song)
-# WHERE seed.artists CONTAINS 'The Strokes'
-#    OR seed.artists CONTAINS 'Regina Spektor'
-# MATCH (seed)-[r:SIMILAR_TO]-(rec:Song)
-# WHERE NOT rec.artists CONTAINS 'The Strokes'
-#   AND NOT rec.artists CONTAINS 'Regina Spektor'
-#   AND rec.track_genre IN ['alt-rock', 'alternative', 'indie', 'pop', 'rock',
-#       'acoustic', 'singer-songwriter', 'indie-pop', 'power-pop', 'garage',
-#       'punk', 'emo', 'piano', 'folk', 'sad', 'new-wave', 'grunge', 'post-punk']
-#   AND rec.track_name =~ '[\\x00-\\x7F]+'
-# WITH rec, COUNT(r) AS connections, AVG(r.distance) AS avg_dist
-# ORDER BY (toFloat(connections) / avg_dist) DESC
-# RETURN rec.track_name AS title, rec.artists AS artist,
-#        rec.album_name AS album, connections, avg_dist
-# LIMIT 5
